@@ -26,6 +26,7 @@ const Googleoauth = () => {
   });
   
 
+  // Check if the user is already registered or not
   const authenticate = () => {
     axios
       .post(`${process.env.REACT_APP_API_URL}/data/checkuser`, {
@@ -39,26 +40,51 @@ const Googleoauth = () => {
         }
       });
   };
+
+
+  // Submit data to the database
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Submit details to backend
     const userDetails = {
       mobile,
       dob,
       gender,
       aboutme,
       loginTime: moment().format("YYYY-MM-DD HH:mm:ss a"),
+      lastlogin: Date(),
       ...profile,
     };
 
-    axios.post("http://localhost:7000/data/userdetails", userDetails);
+    axios.post(`${process.env.REACT_APP_API_URL}/data/userdetails`, userDetails);
     localStorage.setItem("profile", JSON.stringify(userDetails));
     navigate("/home");
   };
 
+
+  // Uppdate login time in database
+  const updateloginTime = async (email: String) => {
+    let lastlogin : String= Date();
+    
+    let newData = { lastlogin, email: email };
+
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/data/updatelogintime`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(newData),
+      }
+    );
+  }
+
+  // call the authenticate method to check if the user with this email  is already registered or not
   if (profile && profile.email) {
-    authenticate(); // once we have the user details, we need to authenticate the user to displaye and route to the dashboard page
+    authenticate(); // once we have the user details, we need to authenticate the user to display and route to the dashboard page
+    updateloginTime(profile.email);
     localStorage.setItem("profile", JSON.stringify(profile));
   }
 

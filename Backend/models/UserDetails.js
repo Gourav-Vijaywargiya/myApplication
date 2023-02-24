@@ -38,13 +38,13 @@ const UserDetailsSchema = new mongoose.Schema({
       type:String
     },
     image: {
-      type: String,
+      type: Buffer,
     },
     aboutme:{
       type: String
     },
     lastlogin:{
-      type: Date
+      type: String
     },
     createdAt: {
       type: Date,

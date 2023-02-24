@@ -8,7 +8,7 @@ export interface user {
   Mobile: number;
   DateofBirth: string;
   Gender: string;
-  loginTime: string;
+  lastlogin: string;
   image: string;
   aboutme: string;
   createdAt: string;
@@ -44,7 +44,7 @@ export interface updateFormData {
   Mobile: string;
   DateofBirth: string;
   Gender: string;
-  image: string;
+  image: string ;
   aboutme: string;
 }
 

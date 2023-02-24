@@ -161,6 +161,7 @@ const Updateform = () => {
               name = "aboutme"
               className="form-control"
               placeholder="About me"
+              value = {data.aboutme}
               onChange={onChange}
             />
           </div>

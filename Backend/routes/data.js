@@ -43,6 +43,7 @@ router.post('/userdetails',async (req,res) =>{
         image:body.picture,
         aboutme : body.aboutme,
         loginTime:body.loginTime,
+        lastlogin : body.lastlogin,
         email:body.email
     }
     try{
@@ -77,11 +78,34 @@ router.patch('/updatedata',async (req,res)=>{
         Gender:body.Gender,
         DateofBirth:body.DateofBirth,
         image:body.picture,
-        aboutme : body.aboutme
+        aboutme : body.aboutme,
+        lastlogin : body.lastlogin
     }
-
+    console.log(updatedUserDetails);
     User = await user.findOne({email: body.email});
-    // console.log(User,"user");
+    if(User)
+    {
+    // if(User.email !== body.email) return res.status(401).send("Not allowed");
+    User = await user.findOneAndUpdate({email: body.email},{$set : updatedUserDetails});
+    await User.save();
+    return res.status(200).send("successfull response");
+    }
+    else{
+        console.log("User not found");
+        return res.send(404);
+    }
+})
+
+// Route for : update login time in database
+router.patch('/updatelogintime',async (req,res)=>{
+    const body = req.body;
+    console.log("body is :",body);
+    let User;
+    let updatedUserDetails = {
+        lastlogin : body.lastlogin
+    }
+    console.log(updatedUserDetails);
+    User = await user.findOne({email: body.email});
     if(User)
     {
     // if(User.email !== body.email) return res.status(401).send("Not allowed");
