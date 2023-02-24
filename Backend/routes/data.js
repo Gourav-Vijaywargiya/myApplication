@@ -41,6 +41,7 @@ router.post('/userdetails',async (req,res) =>{
         Gender:body.gender,
         DateofBirth:body.dob,
         image:body.picture,
+        aboutme : body.aboutme,
         loginTime:body.loginTime,
         email:body.email
     }
@@ -75,7 +76,8 @@ router.patch('/updatedata',async (req,res)=>{
         Mobile:body.Mobile,
         Gender:body.Gender,
         DateofBirth:body.DateofBirth,
-        image:body.picture
+        image:body.picture,
+        aboutme : body.aboutme
     }
 
     User = await user.findOne({email: body.email});

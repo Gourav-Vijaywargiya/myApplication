@@ -10,6 +10,7 @@ export interface user {
   Gender: string;
   loginTime: string;
   image: string;
+  aboutme: string;
   createdAt: string;
   __v: number;
 }

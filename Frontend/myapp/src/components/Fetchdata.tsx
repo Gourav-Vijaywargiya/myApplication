@@ -83,11 +83,12 @@ const userProfile : userProfile = JSON.parse(localStorage.getItem("profile") as 
             <th scope ="col" > Name </th>
             <th  scope ="col" >First Name </th>
             <th scope ="col" >Last Name </th>
-            <th scope ="col" >image </th>
-            <th scope ="col" >email </th>
+            <th scope ="col" >Image </th>
+            <th scope ="col" >Email </th>
             <th scope ="col" >Mobile No. </th>
             <th scope ="col" >Gender </th>
             <th scope ="col" >Date of Birth </th>
+            <th scope ="col" >About Me </th>
             <th scope ="col" >Signup Time </th>
           </tr>
         </thead>
@@ -114,6 +115,7 @@ const userProfile : userProfile = JSON.parse(localStorage.getItem("profile") as 
             <td>{item.Mobile}</td>
             <td>{item.Gender}</td>
             <td>{item.DateofBirth}</td>
+            <td>{item.aboutme}</td>
             <td>{item.loginTime}</td>
           </tr>
         ))}

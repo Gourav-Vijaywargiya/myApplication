@@ -102,13 +102,13 @@ const Googleoauth = () => {
           {show ? (
             navigate("/home")
           ) : (
-            <div>
+            <div style ={{margin: "20px"}}>
               <h3>Login with Google</h3>
-              <img src={profile.picture} alt="Profile Picture" />
-              <h3>{profile.name} LoggedIn</h3>
-              <p>Name : {profile.name}</p>
-              <p>Email : {profile.email}</p>
-              <button className=" btn btn-danger" onClick={logOut}>
+              <img style ={{margin: "5px"}} src={profile.picture} alt="Profile Picture" />
+              <h3 style ={{margin: "1px"}}>{profile.name} LoggedIn</h3>
+              <h6 style ={{marginTop: "5px"}}>Name : {profile.name}</h6>
+              <h6 style ={{marginTop: "5px"}}>Email : {profile.email}</h6>
+              <button className=" btn btn-danger my-3" onClick={logOut}>
                 logout
               </button>
               <br />
@@ -142,9 +142,9 @@ const Googleoauth = () => {
         </div>
       )}
       {user && user.access_token && (
-        <form onSubmit={handleSubmit}>
+        <form style ={{marginLeft: "20px"}}onSubmit={handleSubmit}>
           <h3>Enter Required Details</h3>
-          <label htmlFor="mobile">Mobile No.:</label>
+          <label style ={{marginRight:"5px"}} htmlFor="mobile"><b>Mobile No:</b></label>
           <input
             type="tel"
             name="mobile"
@@ -155,7 +155,7 @@ const Googleoauth = () => {
             required
           />
 
-          <label htmlFor="dob">Date of Birth.:</label>
+          <label style ={{marginLeft:"10px", marginRight:"5px"}} htmlFor="dob"><b>Date of Birth:</b></label>
           <input
             type="date"
             name="dob"
@@ -166,7 +166,7 @@ const Googleoauth = () => {
             required
           />
 
-          <label htmlFor="gender"> Gender:</label>
+          <label style ={{marginLeft:"10px", marginRight:"5px"}} htmlFor="gender"> <b>Gender:</b></label>
           <input
             type="gender"
             name="gender"
@@ -177,7 +177,7 @@ const Googleoauth = () => {
             required
           />
 
-          <label htmlFor="aboutme"> About Me:</label>
+          <label style ={{marginLeft:"10px", marginRight:"5px"}} htmlFor="aboutme"><b>About Me:</b></label>
           <input
             type="text"
             name="aboutme"
@@ -188,7 +188,7 @@ const Googleoauth = () => {
             required
           />
 
-          <button type="submit">Submit</button>
+          <button className ="btn btn-success" style ={{marginLeft: "10px"}} type="submit">Submit</button>
         </form>
       )}
     </div>

@@ -146,7 +146,7 @@ const Updateform = () => {
               type="integer"
               name="Mobile"
               className="form-control"
-              placeholder="Mobile No."
+              placeholder="Mobile No"
               onChange={onChange}
               value={data.Mobile}
             />
@@ -175,7 +175,7 @@ const Updateform = () => {
             />
           </div>
         </div>
-        <button type="submit">Submit</button>
+        <button  type="submit">Submit</button>
       </form>
     </div>
   );
