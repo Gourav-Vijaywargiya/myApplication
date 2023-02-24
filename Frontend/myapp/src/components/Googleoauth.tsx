@@ -143,21 +143,39 @@ const Googleoauth = () => {
           )}
         </>
       ) : (
-        <div
-          style={{
-            marginLeft: "800px",
-            marginTop: "400px",
-            width: "250px",
-            height: "45px",
-          }}
-        >
-          <h3>Login with Google</h3>
-          <br />
-          <br />
-          <Button
+        // <div style ={{backgroundColor: "red"}}>
+        // <div
+        //   style={{
+        //     marginLeft: "800px",
+        //     marginTop: "400px",
+        //     width: "250px",
+        //     height: "45px",
+        //   }}
+        // >
+        //   <h3>Login with Google</h3>
+        //   <br />
+        //   <br />
+        //   <Button
+        //     variant="danger"
+        //     onClick={() => login()}
+        //     style={{ marginLeft: "15px" }}
+        //   >
+            
+        //     <div className="d-flex justify-content-between align-items-center">
+        //       <FaGoogle className="mx-2" />
+        //       <span>Sign in with Google</span>
+        //     </div>
+        //   </Button>
+        // </div>
+        // </div>
+        <div style ={{background: "linear-gradient(to bottom, #FFC300, #FF5733), #F44336",boxShadow: "10px 10px blur lightblue",marginTop:"190px",marginLeft: "620px",height:"400px" ,width: "600px"}}>
+          <br/>
+          <br/>
+            <p style={{marginLeft:"50px", marginTop:"45px"}}><h1>Welcome to User Directory</h1></p>
+            <Button
             variant="danger"
             onClick={() => login()}
-            style={{ marginLeft: "15px" }}
+            style={{ marginLeft: "185px",marginTop: "80px"}}
           >
             
             <div className="d-flex justify-content-between align-items-center">

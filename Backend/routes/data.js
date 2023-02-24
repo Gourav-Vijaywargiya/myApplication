@@ -85,7 +85,7 @@ router.patch('/updatedata',async (req,res)=>{
     User = await user.findOne({email: body.email});
     if(User)
     {
-    // if(User.email !== body.email) return res.status(401).send("Not allowed");
+    if(User.email !== body.email) return res.status(401).send("Not allowed");
     User = await user.findOneAndUpdate({email: body.email},{$set : updatedUserDetails});
     await User.save();
     return res.status(200).send("successfull response");
