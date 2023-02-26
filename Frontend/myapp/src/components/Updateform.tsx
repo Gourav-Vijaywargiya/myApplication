@@ -80,7 +80,7 @@ const Updateform = () => {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/updatedata`,
       {
-        method: "POST",
+        method: "PATCH",
         headers: headers,
         body: formData,
       }

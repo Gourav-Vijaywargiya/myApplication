@@ -84,7 +84,7 @@ const Googleoauth = () => {
   // call the authenticate method to check if the user with this email  is already registered or not
   if (profile && profile.email) {
     authenticate(); // once we have the user details, we need to authenticate the user to display and route to the dashboard page
-    updateloginTime(profile.email);
+    // updateloginTime(profile.email);
     localStorage.setItem("profile", JSON.stringify(profile));
   }
 
@@ -126,6 +126,7 @@ const Googleoauth = () => {
       {profile && profile.email ? (
         <>
           {show ? (
+            updateloginTime(profile.email),
             navigate("/home")
           ) : (
             <div style ={{margin: "20px"}}>
@@ -169,6 +170,7 @@ const Googleoauth = () => {
             value={mobile!}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setMobile(Number((e.target as HTMLInputElement).value))
+              // setMobile(e.target.value)
             }
             required
           />

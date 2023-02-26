@@ -1,5 +1,4 @@
 const express = require('express');
-// const router = require("express").Router();
 const user = require('../models/UserDetails');
 const { body, validationResult } = require('express-validator');
 const { find } = require('../models/UserDetails');
@@ -47,7 +46,7 @@ router.post('/checkuser', async (req,res)=>{
         const User = await user.findOne({email: email});
         if(User)
         {
-            return res.send({status:true,message:"successfull responsefrom backend"});
+            return res.send({status:true,message:"successfull response from backend"});
         }
         else
         {
@@ -95,7 +94,7 @@ catch(error){
 )
 
 // Route for: update data in database
-router.post('/updatedata',upload.single('image'),async (req,res)=>{
+router.patch('/updatedata',upload.single('image'),async (req,res)=>{
     try{
         const body = req.body;
         let User;
@@ -135,7 +134,7 @@ router.post('/updatedata',upload.single('image'),async (req,res)=>{
 
 
 
-// Route for : update login time in database
+// // Route for : update login time in database
 router.patch('/updatelogintime',async (req,res)=>{
     try{
         const body = req.body;
@@ -182,7 +181,8 @@ router.get('/fetchsearchdata/:key', async (req,res)=>{
         "$or": [
           {"firstName": {$regex: regexKey}},
           {"lastName": {$regex: regexKey}},
-          {"email": {$regex: regexKey}}
+          {"email": {$regex: regexKey}},
+          {"mobile": {$regex: regexKey}}
         ]
       }
     : {"Mobile": {$eq: parseInt(key)}};

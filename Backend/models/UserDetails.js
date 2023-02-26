@@ -21,7 +21,7 @@ const UserDetailsSchema = new mongoose.Schema({
   //  required: true
     },
     Mobile:{
-    type:Number,
+    type:String,
   },
   DateofBirth: {
       type: Date,
