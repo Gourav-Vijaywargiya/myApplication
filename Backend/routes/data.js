@@ -14,7 +14,6 @@ const multer = require('multer');
 var storage = multer.diskStorage({
     dest : function(req,file,cb){
         cb(null, path.join(__dirname, '../uploads/'));
-        console.log((req.file),"path is")
     },
     filename : function(req,file,cb){
         let ext = path.extname(file.originalname);
@@ -109,11 +108,9 @@ router.patch('/updatedata',upload.single('image'),async (req,res)=>{
         aboutme : body.aboutme,
         lastlogin : body.lastlogin
     }
-    console.log(req.file);
     if(req.file){
         updatedUserDetails.image = req.file.path
     }
-    console.log(updatedUserDetails,"update details is ");
     User = await user.findOne({email: body.email});
     if(User)
     {

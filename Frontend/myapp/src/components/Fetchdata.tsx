@@ -44,7 +44,6 @@ const Fetchdata = () => {
   const getSearchData = async () => {
       // e.preventDefault();
       setSearchPage(page);
-      console.log(searchPage,"search page in getsearchdata")
       setPage(1);
       const response = await fetch(
         // `${process.env.REACT_APP_API_URL}/data/fetchdata?page=${page}&limit=${limit}`,
