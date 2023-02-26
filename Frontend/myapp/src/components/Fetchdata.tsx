@@ -95,7 +95,7 @@ const Fetchdata = () => {
             placeholder="Search Here"
             onChange={
               (e) => {
-              setSearchTitle(e.target.value);
+              setSearchTitle((e.target.value));
             }
           }
             style={{ width: "1200px", height: "50px", padding: "15px" }}

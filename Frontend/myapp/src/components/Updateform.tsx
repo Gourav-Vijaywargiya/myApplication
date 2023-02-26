@@ -48,29 +48,41 @@ const Updateform = () => {
     e.preventDefault();
 
     let newData = { ...data, email: userProfile.email };
-    // let imageData = {image:data.image, email: userProfile.email };
 
-    // const response2 = await fetch(
-    //   `${process.env.REACT_APP_API_URL}/data/updateimage`,
-    //   {
-    //     method: "PATCH",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Accept: "application/json",
-    //     },
-    //     body: JSON.stringify(imageData),
-    //   }
-    // );
+    // const formData = new FormData();
+    // for (const key in newData) {
+    //   formData.append(key, newData[key]);
+    // }
+    const formData = new FormData();
+    // for (const key in newData) {
+    //   formData.append(key, newData?[key]);
+    // }
+    
+    formData.append("email", newData.email);
+    formData.append("name", newData.name);
+    formData.append("lastName", newData.lastName);
+    formData.append("firstName", newData.firstName);
+    formData.append("DateofBirth", newData.DateofBirth);
+    formData.append("Gender", newData.Gender);
+    formData.append("aboutme", newData.aboutme);
+    formData.append("image", newData.image);
+    formData.append("Mobile", newData.Mobile);
+
+    const boundary = `--------------------------${Date.now().toString(16)}`;
+
+    const headers = {
+      Accept: "application/json",
+      // "Content-Type": 'multipart/form-data' 
+    };
+
+    console.log(formData);
 
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/updatedata`,
       {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(newData),
+        method: "POST",
+        headers: headers,
+        body: formData,
       }
     );
 
@@ -98,8 +110,6 @@ const Updateform = () => {
         <form
           onSubmit={submitData}
           style={{ marginLeft: "30px", marginRight: "30px" }}
-          method="PATCH"
-          action="`${process.env.REACT_APP_API_URL}/data/updatedata` "
           encType="multipart/form-data"
         >
           <div className="row my-2">
@@ -218,7 +228,6 @@ const Updateform = () => {
             </div>
             <div className="col">
               <div>
-                {" "}
                 <label htmlFor="image" style={{ marginBottom: "35px" }}>
                   <b>Profile Picture</b>
                 </label>{" "}
@@ -227,7 +236,9 @@ const Updateform = () => {
                 type="file"
                 name="image"
                 className="form-control-file"
-                onChange={onChange}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>{
+                  setData({ ...data, image: e.target.value
+                });}}
               />
             </div>
           </div>

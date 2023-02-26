@@ -46,6 +46,7 @@ export interface updateFormData {
   Gender: string;
   image: string ;
   aboutme: string;
+  [key: string]: string | number | File | null;
 }
 
 

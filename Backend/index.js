@@ -4,23 +4,13 @@ const express = require('express');
 
 const session = require('express-session')
 
-const mongoose = require('mongoose');
-
-const dotenv = require('dotenv');
-
 const app = express();
 
 var cors = require('cors');
 
-var router = express.Router();
-
-router.use(express.static(__dirname + "./public/"))
-
-const MongoStore = require('connect-mongo'); new (session);
-
-
 connectToMongo();
 
+app.use(express.json());
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -31,21 +21,8 @@ app.use(function (req, res, next) {
   });
 
   app.use(cors({
-    origin: 'http://localhost:3001'
+    origin: `${process.env.CLIENT_URL}`
   }))
-
-
-app.use(express.json());
-
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  store:  new MongoStore(({ mongoUrl: process.env.mongoURI })
-)}))
-
-
-
 
 app.use('/data',require('./routes/data'));
 
