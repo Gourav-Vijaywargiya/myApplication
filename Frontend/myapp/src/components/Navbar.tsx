@@ -13,8 +13,8 @@ const Navbar = () => {
     navigate("/");
   };
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div style ={{marginTop:"130px"}}>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark" style ={{position: "fixed",top:"0px",width:"100%"}}>
   <div className="container-fluid">
     <span className="navbar-brand">User Directory</span>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

@@ -7,7 +7,6 @@ const UserDetailsSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-  //   required: true,
   },
   firstName: {
     type: String,
@@ -15,7 +14,6 @@ const UserDetailsSchema = new mongoose.Schema({
   },
   lastName: {
     type: String,
-  //   required: true,
   },
   email:{
     type:String,
@@ -24,15 +22,12 @@ const UserDetailsSchema = new mongoose.Schema({
     },
     Mobile:{
     type:Number,
-    // unique:true
   },
   DateofBirth: {
       type: Date,
-    //   required: true,
     },
     Gender: {
       type: String,
-    //   required: true,
     },
     loginTime:{
       type:String

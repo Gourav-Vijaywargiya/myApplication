@@ -1,21 +1,40 @@
 const express = require('express');
-const router = require("express").Router();
+// const router = require("express").Router();
 const user = require('../models/UserDetails');
 const { body, validationResult } = require('express-validator');
 const { find } = require('../models/UserDetails');
 const connectToMongo = require('../db');
+const multer  = require('multer');
+const path = require('path');
+// const upload = multer({ dest: 'uploads/' }) 
 const app = express();
 app.use(express.json());
+var router = express.Router();
 
+// router.use(express.static(__dirname + "./public/"))
 
+var storage = multer.diskStorage({
+    destination: (req,file,cd) => {
+        cb(null,'../Images')
+    },
+
+    filename:(req,file,cb)=>{
+        console.log(file,"file is ");
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+var upload = multer({
+    storage:storage
+});
 
 // route for : check if user is already registered or not
 router.post('/checkuser', async (req,res)=>{
-    console.log(req.body);
+    // console.log(req.body);
     const {email} = req.body;
-    console.log(email);
+    // console.log(email);
         const User = await user.findOne({email: email});
-        console.log(User);
+        // console.log(User);
         if(User)
         {
             return res.send({status:true,message:"successfull responsefrom backend"});
@@ -77,11 +96,10 @@ router.patch('/updatedata',async (req,res)=>{
         Mobile:body.Mobile,
         Gender:body.Gender,
         DateofBirth:body.DateofBirth,
-        image:body.picture,
         aboutme : body.aboutme,
         lastlogin : body.lastlogin
     }
-    console.log(updatedUserDetails);
+    console.log(updatedUserDetails,"update details is ");
     User = await user.findOne({email: body.email});
     if(User)
     {
@@ -96,15 +114,36 @@ router.patch('/updatedata',async (req,res)=>{
     }
 })
 
+// Route for: update image in database
+router.patch('/updateimage',upload.single('image'),async (req,res)=>{
+    const body = req.body;
+    console.log("body of image is :",body);
+    let User;
+    let updatedUserImage = {
+        image:body.image,
+    }
+    console.log(updatedUserImage,"updated image is ");
+    User = await user.findOne({email: body.email});
+    if(User)
+    {
+    if(User.email !== body.email) return res.status(401).send("Not allowed");
+    User = await user.findOneAndUpdate({email: body.email},{$set : updatedUserImage});
+    await User.save();
+    return res.status(200).send("successfull response");
+    }
+    else{
+        console.log("User not found");
+        return res.send(404);
+    }
+})
+
 // Route for : update login time in database
 router.patch('/updatelogintime',async (req,res)=>{
     const body = req.body;
-    console.log("body is :",body);
     let User;
     let updatedUserDetails = {
         lastlogin : body.lastlogin
     }
-    console.log(updatedUserDetails);
     User = await user.findOne({email: body.email});
     if(User)
     {
@@ -122,24 +161,47 @@ router.patch('/updatelogintime',async (req,res)=>{
 // Route for: Get users data
 router.get('/fetchdata', async (req,res)=>{
 
-    const page = req.query.page || 1;
-    const limit = req.query.limit || 2;
+    // const page = req.query.page || 1;
+    // const limit = req.query.limit || 2;
 
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
+    // const startIndex = (page - 1) * limit;
+    // const endIndex = page * limit;
 
     const totalResults = await user.countDocuments();
     
-    const User = await user.find().limit(limit).skip(startIndex).exec();
+    // const User = await user.find().limit(limit).skip(startIndex).exec();
+    const User = await user.find()
     res.json({User,totalResults});
 })
 
+// Route for: Get users data according to search criteria
+router.get('/fetchsearchdata/:key', async (req,res)=>{
+
+    // const page = req.query.page || 1;
+    // const limit = req.query.limit || 2;
+    // const searchQuery = req.query.searchQuery;
+
+    // const startIndex = (page - 1) * limit;
+    // const endIndex = page * limit;
+
+    // const totalResults = await user.countDocuments();
+    
+    const User = await user.find({
+        "$or" : [
+            {"firstName" :{$regex:req.params.key}},
+            {"lastName" :{$regex:req.params.key}},
+            {"email" :{$regex:req.params.key}},
+            // {"Mobile" :{$regex:req.params.key}}
+        ]
+    });
+    // const User = await user.find()
+    const totalResults = User.length;
+    res.json({User,totalResults});
+})
 
 // route for ; get particular user data
 router.get('/fetchdata/:email', async (req,res)=>{
-console.log(req.params.email);
     const User = await user.findOne({email : req.params.email});
-    console.log(User);
     res.json(User);
 })
 

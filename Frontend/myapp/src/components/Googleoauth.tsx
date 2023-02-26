@@ -129,7 +129,6 @@ const Googleoauth = () => {
             navigate("/home")
           ) : (
             <div style ={{margin: "20px"}}>
-              <h3>Login with Google</h3>
               <img style ={{margin: "5px"}} src={profile.picture} alt="Profile Picture" />
               <h3 style ={{margin: "1px"}}>{profile.name} LoggedIn</h3>
               <h6 style ={{marginTop: "5px"}}>Name : {profile.name}</h6>
@@ -143,31 +142,6 @@ const Googleoauth = () => {
           )}
         </>
       ) : (
-        // <div style ={{backgroundColor: "red"}}>
-        // <div
-        //   style={{
-        //     marginLeft: "800px",
-        //     marginTop: "400px",
-        //     width: "250px",
-        //     height: "45px",
-        //   }}
-        // >
-        //   <h3>Login with Google</h3>
-        //   <br />
-        //   <br />
-        //   <Button
-        //     variant="danger"
-        //     onClick={() => login()}
-        //     style={{ marginLeft: "15px" }}
-        //   >
-            
-        //     <div className="d-flex justify-content-between align-items-center">
-        //       <FaGoogle className="mx-2" />
-        //       <span>Sign in with Google</span>
-        //     </div>
-        //   </Button>
-        // </div>
-        // </div>
         <div style ={{background: "linear-gradient(to bottom, #FFC300, #FF5733), #F44336",boxShadow: "10px 10px blur lightblue",marginTop:"190px",marginLeft: "620px",height:"400px" ,width: "600px"}}>
           <br/>
           <br/>
@@ -232,7 +206,7 @@ const Googleoauth = () => {
             required
           />
 
-          <button className ="btn btn-success" style ={{marginLeft: "10px"}} type="submit">Submit</button>
+          <button className ="btn btn-success" style ={{marginLeft: "10px", marginBottom:"8px"}} type="submit">Submit</button>
         </form>
       )}
     </div>

@@ -12,6 +12,10 @@ const app = express();
 
 var cors = require('cors');
 
+var router = express.Router();
+
+router.use(express.static(__dirname + "./public/"))
+
 const MongoStore = require('connect-mongo'); new (session);
 
 

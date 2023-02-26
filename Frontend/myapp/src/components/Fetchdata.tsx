@@ -16,10 +16,17 @@ const Fetchdata = () => {
   const [searchTitle, setSearchTitle] = useState<string | number>("");
   const limit: number = 2;
   const navigate = useNavigate();
-
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const [search, setSearch] = useState<Boolean>(false);
+ const [searchPage,setSearchPage] = useState<number>(1);
+  
   const getData = async () => {
+    // e.preventDefault();
+    setPage(searchPage);
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/data/fetchdata?page=${page}&limit=${limit}`,
+      // `${process.env.REACT_APP_API_URL}/data/fetchdata?page=${page}&limit=${limit}`,
+      `${process.env.REACT_APP_API_URL}/data/fetchdata`,
       {
         method: "GET",
         headers: {
@@ -33,6 +40,28 @@ const Fetchdata = () => {
     setTotalResult(Number(temp.totalResults));
   };
 
+
+  const getSearchData = async () => {
+      // e.preventDefault();
+      setSearchPage(page);
+      console.log(searchPage,"search page in getsearchdata")
+      setPage(1);
+      const response = await fetch(
+        // `${process.env.REACT_APP_API_URL}/data/fetchdata?page=${page}&limit=${limit}`,
+        `${process.env.REACT_APP_API_URL}/data/fetchsearchdata/${searchTitle}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      let temp: datatype = await response.json();
+      setData(temp.User);
+      setTotalResult(Number(temp.totalResults));
+      // setPage(searchPage);
+  };
   const changePage = (type: string): void => {
     if (type === "prev") {
       setPage((old) => old - 1);
@@ -47,8 +76,11 @@ const Fetchdata = () => {
 
 
   useEffect(() => {
+    if(searchTitle ===""){
     getData();
-  }, [page]);
+    setPage(searchPage);
+    }
+  }, [searchTitle]);
 
   return (
     <>
@@ -60,11 +92,15 @@ const Fetchdata = () => {
         >
           <input
             type={"text" || "tel"}
-            placeholder= "Search Here"
-            onChange={(e) => setSearchTitle(e.target.value)}
-            style={{ width: "1320px", height: "50px",padding:"15px"}}
+            placeholder="Search Here"
+            onChange={
+              (e) => {
+              setSearchTitle(e.target.value);
+            }
+          }
+            style={{ width: "1200px", height: "50px", padding: "15px" }}
           />
-          
+          <button className="btn btn-primary " type ="submit" style ={{width:"100px",height:"50px"}} onClick ={getSearchData}><i className="bi bi-search"></i>Search</button>
         </div>
         <table
           className="table table-bordered table-hover"
@@ -84,43 +120,27 @@ const Fetchdata = () => {
               <th scope="col">Last login time</th>
             </tr>
           </thead>
-          <tbody style={{backgroundColor: "#F0F8FF"}}>
-            {data &&
-              data
-                .filter((value) => {
-                  if (searchTitle === "") {
-                    return value;
-                  } else if (
-                    value.firstName
-                      .toLowerCase()
-                      .includes(searchTitle.toString().toLowerCase()) ||
-                    value.lastName
-                      .toLowerCase()
-                      .includes(searchTitle.toString().toLowerCase()) ||
-                    value.email
-                      .toLowerCase()
-                      .includes(searchTitle.toString().toLowerCase()) ||
-                    value.Mobile.toString().includes(searchTitle.toString())
-                  ) {
-                    return value;
-                  }
-                })
-                .map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.firstName} </td>
-                    <td>{item.lastName} </td>
-                    <td>
-                      <img src={item.image} alt="ProfilePic" />
-                    </td>
-                    <td>{item.email} </td>
-                    <td>{item.Mobile}</td>
-                    <td>{item.Gender}</td>
-                    <td>{item.DateofBirth.slice(0,10)}</td>
-                    <td>{item.aboutme}</td>
-                    <td>{item.lastlogin.slice(0,24)}</td>
-                  </tr>
-                ))}
+          <tbody style={{ backgroundColor: "#F0F8FF" }}>
+            {
+               data &&
+                data
+                  .slice(startIndex, endIndex)
+                  .map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.name}</td>
+                      <td>{item.firstName} </td>
+                      <td>{item.lastName} </td>
+                      <td>
+                        <img src={item.image} alt="ProfilePic" />
+                      </td>
+                      <td>{item.email} </td>
+                      <td>{item.Mobile}</td>
+                      <td>{item.Gender}</td>
+                      <td>{item.DateofBirth.slice(0, 10)}</td>
+                      <td>{item.aboutme}</td>
+                      <td>{item.lastlogin.slice(0, 24)}</td>
+                    </tr>
+                  ))}
           </tbody>
         </table>
         <div
