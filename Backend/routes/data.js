@@ -6,37 +6,28 @@ const connectToMongo = require('../db');
 const app = express();
 app.use(express.json());
 var router = express.Router();
-router.use(express.static(__dirname + "../uploads/"))
-
+// app.use('../uploads',express.static('uploads'));
 const path = require('path');
+// app.use("/uploads", express.static(path.join("Backend/uploads")));  
+const fs = require('fs');
+
+
 const multer = require('multer');
 
 var storage = multer.diskStorage({
-    dest : function(req,file,cb){
+    destination : function(req,file,cb){
+        console.log(file);
         cb(null, path.join(__dirname, '../uploads/'));
     },
     filename : function(req,file,cb){
         let ext = path.extname(file.originalname);
+        console.log('ext', ext);
         cb(null,Date.now() + ext)
     }
 })
 
 
-var upload = multer({
-    storage : storage,
-    fileFilter : function(req,file,callback){
-        if(
-            file.mimetype === 'image/jpg' ||
-            file.mimetype === 'image/png' ||
-            file.mimetype === 'image/jpeg'
-        ){
-            callback(null,true)
-        }else{
-            console.log('only jpg and png are supported')
-            callback(null,false)
-        }
-    }
-})
+let upload = multer({ storage : storage });
 
 // route for : check if user is already registered or not
 router.post('/checkuser', async (req,res)=>{
@@ -52,7 +43,7 @@ router.post('/checkuser', async (req,res)=>{
             return res.send({status:false})
         }
     }catch(err){
-        return res.status(500).send({ error: 'Internal server error' });
+        return res.status(500).send(err);
     }
     })
 
@@ -93,11 +84,12 @@ catch(error){
 )
 
 // Route for: update data in database
-router.patch('/updatedata',upload.single('image'),async (req,res)=>{
+router.patch('/updatedata', upload.single('image'),async (req,res)=>{
     try{
+        console.log('file', req.file)
         const body = req.body;
         let User;
-    let updatedUserDetails = {
+        let updatedUserDetails = {
         id: body.id,
         name : body.name,
         firstName:body.firstName,
@@ -108,8 +100,9 @@ router.patch('/updatedata',upload.single('image'),async (req,res)=>{
         aboutme : body.aboutme,
         lastlogin : body.lastlogin
     }
+   console.log(req.file);
     if(req.file){
-        updatedUserDetails.image = req.file.path
+        updatedUserDetails.image = req.file.filename;
     }
     User = await user.findOne({email: body.email});
     if(User)

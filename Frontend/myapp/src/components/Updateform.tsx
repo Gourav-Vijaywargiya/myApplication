@@ -42,6 +42,14 @@ const Updateform = () => {
     });
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setData({ ...data, image: file
+      })
+    }
+  };
+
   const submitData = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -57,7 +65,7 @@ const Updateform = () => {
     // for (const key in newData) {
     //   formData.append(key, newData?[key]);
     // }
-    
+    console.log('newData.image', newData.image,);
     formData.append("email", newData.email);
     formData.append("name", newData.name);
     formData.append("lastName", newData.lastName);
@@ -68,11 +76,11 @@ const Updateform = () => {
     formData.append("image", newData.image);
     formData.append("Mobile", newData.Mobile);
 
-    const boundary = `--------------------------${Date.now().toString(16)}`;
+    // const boundary = `--------------------------${Date.now().toString(16)}`;
 
     const headers = {
-      Accept: "application/json",
-      // "Content-Type": 'multipart/form-data' 
+      // Accept: "application/json",
+      "content-type": 'multipart/form-data;' 
     };
 
     console.log(formData);
@@ -81,7 +89,6 @@ const Updateform = () => {
       `${process.env.REACT_APP_API_URL}/data/updatedata`,
       {
         method: "PATCH",
-        headers: headers,
         body: formData,
       }
     );
@@ -236,9 +243,7 @@ const Updateform = () => {
                 type="file"
                 name="image"
                 className="form-control-file"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>{
-                  setData({ ...data, image: e.target.value
-                });}}
+                onChange={handleImageChange}
               />
             </div>
           </div>

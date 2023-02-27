@@ -20,6 +20,23 @@ export interface datatype {
   totalResults: number;
 }
 
+export interface profilepic{
+  _id: string;
+  id: string;
+  name: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  Mobile: number;
+  DateofBirth: string;
+  Gender: string;
+  lastlogin: string;
+  image: string;
+  aboutme: string;
+  createdAt: string;
+  __v: number;
+}
+
 export interface userProfile {
   name: string ;
   given_name: string ;
@@ -44,7 +61,7 @@ export interface updateFormData {
   Mobile: string;
   DateofBirth: string;
   Gender: string;
-  image: string ;
+  image: string | File;
   aboutme: string;
   [key: string]: string | number | File | null;
 }

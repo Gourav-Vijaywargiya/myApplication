@@ -1,16 +1,39 @@
-import React from 'react'
+import React,{ useEffect, useState } from 'react'
 import { googleLogout } from "@react-oauth/google";
-import {userProfile} from '../Interface/common';
+import {userProfile,profilepic} from '../Interface/common';
 import { useNavigate } from "react-router";
 import { NavDropdown, Dropdown } from 'react-bootstrap';
 const UpdateFormNavbar = () => {
     const userProfile : userProfile = JSON.parse(localStorage.getItem("profile") as string);
+    const [profilepic,setProfilePic] = useState<string>("")
   const navigate = useNavigate();
+
+  const getData = async () => {
+    // e.preventDefault();
+    const response = await fetch(
+      // `${process.env.REACT_APP_API_URL}/data/fetchdata?page=${page}&limit=${limit}`,
+      `${process.env.REACT_APP_API_URL}/data/fetchdata/${userProfile.email}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    let temp: profilepic = await response.json();
+    setProfilePic(temp.image);
+  };
+
   const logout = () => {
     googleLogout();
     localStorage.clear();
     navigate("/");
   }
+
+  useEffect(() => {
+    getData();
+}, []);
   return (
     <div>
       <div style ={{marginTop:"110px"}}>
@@ -27,11 +50,25 @@ const UpdateFormNavbar = () => {
         <li className="nav-item dropdown">
         <Dropdown>
             <Dropdown.Toggle variant="link" id="dropdown-basic">
-              <img src={userProfile.picture} alt="Profile Image" className="rounded-circle" width="55px" height="55px" />
+            {profilepic.includes("google") ? (
+                      <img
+                        style={{ width: "80px", height: "70px", borderRadius:"100%" }}
+                        src={profilepic}
+                        alt="ProfilePic"
+                      />
+                    ) : (
+                      <img
+                        style={{ width: "80px", height: "70px" , borderRadius:"100%"}}
+                        src={`${process.env.REACT_APP_API_URL}/uploads/${profilepic}`}
+                        alt="ProfilePic"
+                      />
+                    )}
+              {/* <img src={userProfile.picture} alt="Profile Image" className="rounded-circle" width="55px" height="55px" /> */}
             </Dropdown.Toggle>
 
             <Dropdown.Menu align="end">
               <Dropdown.Item ><b>Hello, {userProfile.name}</b></Dropdown.Item>
+              <Dropdown.Item href="/home">Home</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item href="/" onClick={logout} style ={{backgroundColor: "red"}}>Logout</Dropdown.Item>
             </Dropdown.Menu>

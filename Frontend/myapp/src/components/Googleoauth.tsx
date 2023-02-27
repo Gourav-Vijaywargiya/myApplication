@@ -24,7 +24,6 @@ const Googleoauth = () => {
     onSuccess: (codeResponse) => setUser(codeResponse),
     onError: (error) => console.log("Login Failed", error),
   });
-  
 
   // Check if the user is already registered or not
   const authenticate = () => {
@@ -143,7 +142,7 @@ const Googleoauth = () => {
           )}
         </>
       ) : (
-        <div style ={{background: "linear-gradient(to bottom, #FFC300, #FF5733), #F44336",boxShadow: "10px 10px blur lightblue",marginTop:"190px",marginLeft: "620px",height:"400px" ,width: "600px"}}>
+        <div className ="container" style ={{background: "linear-gradient(to bottom, #FFC300, #FF5733), #F44336",boxShadow: "10px 10px blur lightblue",marginTop:"190px",height:"400px" ,width: "600px"}}>
           <br/>
           <br/>
             <p style={{marginLeft:"50px", marginTop:"45px"}}><h1>Welcome to User Directory</h1></p>

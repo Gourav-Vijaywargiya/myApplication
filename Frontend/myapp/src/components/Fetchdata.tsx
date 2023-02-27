@@ -19,8 +19,8 @@ const Fetchdata = () => {
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const [search, setSearch] = useState<Boolean>(false);
- const [searchPage,setSearchPage] = useState<number>(1);
-  
+  const [searchPage, setSearchPage] = useState<number>(1);
+
   const getData = async () => {
     // e.preventDefault();
     setPage(searchPage);
@@ -40,26 +40,25 @@ const Fetchdata = () => {
     setTotalResult(Number(temp.totalResults));
   };
 
-
   const getSearchData = async () => {
-      // e.preventDefault();
-      setSearchPage(page);
-      setPage(1);
-      const response = await fetch(
-        // `${process.env.REACT_APP_API_URL}/data/fetchdata?page=${page}&limit=${limit}`,
-        `${process.env.REACT_APP_API_URL}/data/fetchsearchdata/${searchTitle}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-  
-      let temp: datatype = await response.json();
-      setData(temp.User);
-      setTotalResult(Number(temp.totalResults));
-      // setPage(searchPage);
+    // e.preventDefault();
+    setSearchPage(page);
+    setPage(1);
+    const response = await fetch(
+      // `${process.env.REACT_APP_API_URL}/data/fetchdata?page=${page}&limit=${limit}`,
+      `${process.env.REACT_APP_API_URL}/data/fetchsearchdata/${searchTitle}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    let temp: datatype = await response.json();
+    setData(temp.User);
+    setTotalResult(Number(temp.totalResults));
+    // setPage(searchPage);
   };
   const changePage = (type: string): void => {
     if (type === "prev") {
@@ -73,34 +72,38 @@ const Fetchdata = () => {
     navigate("/data/updatedata");
   };
 
-
   useEffect(() => {
-    if(searchTitle ===""){
-    getData();
-    setPage(searchPage);
+    if (searchTitle === "") {
+      getData();
+      setPage(searchPage);
     }
   }, [searchTitle]);
-
   return (
     <>
-      <Navbar />
-      <div className="container mt-5" style={{ padding: "0px" }}>
+      <Navbar  />
+      <div className="container container-fluid mt-8 p-0" >
         <div
-          className="container d-flex justify-content-between align-items-center my-3"
-          style={{ padding: "0px" }}
+          className="container d-flex justify-content-between align-items-center my-3 p-0"
+          
         >
           <input
             type={"text" || "tel"}
             placeholder="Search Here"
-            onChange={
-              (e) => {
-              setSearchTitle((e.target.value));
-            }
-          }
+            onChange={(e) => {
+              setSearchTitle(e.target.value);
+            }}
             style={{ width: "1200px", height: "50px", padding: "15px" }}
           />
-          <button className="btn btn-primary " type ="submit" style ={{width:"100px",height:"50px"}} onClick ={getSearchData}><i className="bi bi-search"></i>Search</button>
+          <button
+            className="btn btn-primary "
+            type="submit"
+            style={{ width: "100px", height: "50px" }}
+            onClick={getSearchData}
+          >
+            <i className="bi bi-search"></i>Search
+          </button>
         </div>
+
         <table
           className="table table-bordered table-hover"
           style={{ borderColor: "ActiveBorder" }}
@@ -119,27 +122,37 @@ const Fetchdata = () => {
               <th scope="col">Last login time</th>
             </tr>
           </thead>
+
           <tbody style={{ backgroundColor: "#F0F8FF" }}>
-            {
-               data &&
-                data
-                  .slice(startIndex, endIndex)
-                  .map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.name}</td>
-                      <td>{item.firstName} </td>
-                      <td>{item.lastName} </td>
-                      <td>
-                        <img src={item.image} alt="ProfilePic" />
-                      </td>
-                      <td>{item.email} </td>
-                      <td>{item.Mobile}</td>
-                      <td>{item.Gender}</td>
-                      <td>{item.DateofBirth.slice(0, 10)}</td>
-                      <td>{item.aboutme}</td>
-                      <td>{item.lastlogin.slice(0, 24)}</td>
-                    </tr>
-                  ))}
+            {data &&
+              data.slice(startIndex, endIndex).map((item) => (
+                <tr key={item.id}>
+                  <td>{item.name}</td>
+                  <td>{item.firstName} </td>
+                  <td>{item.lastName} </td>
+                  <td>
+                    {item.image.includes("google") ? (
+                      <img
+                        style={{ width: "100px", height: "80px" }}
+                        src={item.image}
+                        alt="ProfilePic"
+                      />
+                    ) : (
+                      <img
+                        style={{ width: "100px", height: "80px" }}
+                        src={`${process.env.REACT_APP_API_URL}/uploads/${item.image}`}
+                        alt="ProfilePic"
+                      />
+                    )}
+                  </td>
+                  <td>{item.email} </td>
+                  <td>{item.Mobile}</td>
+                  <td>{item.Gender}</td>
+                  <td>{item.DateofBirth.slice(0, 10)}</td>
+                  <td>{item.aboutme}</td>
+                  <td>{item.lastlogin.slice(0, 24)}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
         <div
