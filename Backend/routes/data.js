@@ -1,20 +1,13 @@
 const express = require('express');
 const user = require('../models/UserDetails');
-const { body, validationResult } = require('express-validator');
-const { find } = require('../models/UserDetails');
-const connectToMongo = require('../db');
 const app = express();
 app.use(express.json());
 var router = express.Router();
-// app.use('../uploads',express.static('uploads'));
 const path = require('path');
-// app.use("/uploads", express.static(path.join("Backend/uploads")));  
-const fs = require('fs');
-
-
 const multer = require('multer');
 
-var storage = multer.diskStorage({
+
+const storage = multer.diskStorage({
     destination : function(req,file,cb){
         console.log(file);
         cb(null, path.join(__dirname, '../uploads/'));
@@ -27,7 +20,20 @@ var storage = multer.diskStorage({
 })
 
 
-let upload = multer({ storage : storage });
+const upload = multer({ storage : storage ,
+    fileFilter : function(req,file,callback){
+        if(
+            file.mimetype === 'image/jpg' ||
+            file.mimetype === 'image/png' ||
+            file.mimetype === 'image/jpeg'
+        ){
+            callback(null,true)
+        }else{
+            console.log('only jpg and png are supported')
+            callback(null,false)
+        }
+    }
+});
 
 // route for : check if user is already registered or not
 router.post('/checkuser', async (req,res)=>{
@@ -86,7 +92,6 @@ catch(error){
 // Route for: update data in database
 router.patch('/updatedata', upload.single('image'),async (req,res)=>{
     try{
-        console.log('file', req.file)
         const body = req.body;
         let User;
         let updatedUserDetails = {
@@ -135,7 +140,6 @@ router.patch('/updatelogintime',async (req,res)=>{
         User = await user.findOne({email: body.email});
         if(User)
         {
-            // if(User.email !== body.email) return res.status(401).send("Not allowed");
             User = await user.findOneAndUpdate({email: body.email},{$set : updatedUserDetails});
             await User.save();
             return res.status(200).send("successfull response");
@@ -148,55 +152,50 @@ router.patch('/updatelogintime',async (req,res)=>{
     }
     })
 
-// Route for: Get users data
-router.get('/fetchdata', async (req,res)=>{
-try{
-    const totalResults = await user.countDocuments();
-    
-    const User = await user.find()
-    res.json({User,totalResults});
-} catch(error){
-    res.status(500).send(error);
-}
-})
-
-// Route for: Get users data according to search criteria
-router.get('/fetchsearchdata/:key', async (req,res)=>{
+    // Route for: Get users data
+    router.get('/fetchdata', async (req,res)=>{
     try{
-        const key = req.params.key;
-    const regexKey = new RegExp(key, "i");
-    // const mobile = parseInt(key);
-    const searchCriteria = isNaN(key)
-    ? {
-        "$or": [
-          {"firstName": {$regex: regexKey}},
-          {"lastName": {$regex: regexKey}},
-          {"email": {$regex: regexKey}},
-          {"mobile": {$regex: regexKey}}
-        ]
-      }
-    : {"Mobile": {$eq: parseInt(key)}};
-        const User = await user.find(searchCriteria);
-        const totalResults = User.length;
+        const totalResults = await user.countDocuments();
+        
+        const User = await user.find()
         res.json({User,totalResults});
-    }catch(error){
+    } catch(error){
         res.status(500).send(error);
     }
-})
+    })
 
-// route for ; get particular user data
-router.get('/fetchdata/:email', async (req,res)=>{
-    try{
-        const User = await user.findOne({email : req.params.email});
-        res.json(User);
-    }catch(error){
-        res.status(500).send(error);
-    }
-})
+    // Route for: Get users data according to search criteria
+    router.get('/fetchsearchdata/:key', async (req,res)=>{
+        try{
+            const key = req.params.key;
+        const regexKey = new RegExp(key, "i");
+        const searchCriteria = isNaN(key)
+        ? {
+            "$or": [
+            {"firstName": {$regex: regexKey}},
+            {"lastName": {$regex: regexKey}},
+            {"email": {$regex: regexKey}},
+            {"mobile": {$regex: regexKey}}
+            ]
+        }
+        : {"Mobile": {$eq: parseInt(key)}};
+            const User = await user.find(searchCriteria);
+            const totalResults = User.length;
+            res.json({User,totalResults});
+        }catch(error){
+            res.status(500).send(error);
+        }
+    })
 
-
-
-
+    // route for ; get particular user data
+    router.get('/fetchdata/:email', async (req,res)=>{
+        try{
+            const User = await user.findOne({email : req.params.email});
+            res.json(User);
+        }catch(error){
+            res.status(500).send(error);
+        }
+    })
 
 
 module.exports = router;

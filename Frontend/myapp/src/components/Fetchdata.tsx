@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { googleLogout } from "@react-oauth/google";
 import { useNavigate } from "react-router";
 import { user, datatype, userProfile } from "../Interface/common";
 import Navbar from "./Navbar";
-// import  '../App.css';
 
 const Fetchdata = () => {
   const userProfile: userProfile = JSON.parse(
@@ -18,14 +16,13 @@ const Fetchdata = () => {
   const navigate = useNavigate();
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-  const [search, setSearch] = useState<Boolean>(false);
   const [searchPage, setSearchPage] = useState<number>(1);
 
+
+  // Funtion to get complete data
   const getData = async () => {
-    // e.preventDefault();
     setPage(searchPage);
     const response = await fetch(
-      // `${process.env.REACT_APP_API_URL}/data/fetchdata?page=${page}&limit=${limit}`,
       `${process.env.REACT_APP_API_URL}/data/fetchdata`,
       {
         method: "GET",
@@ -40,12 +37,12 @@ const Fetchdata = () => {
     setTotalResult(Number(temp.totalResults));
   };
 
+
+  // Function to get searched data
   const getSearchData = async () => {
-    // e.preventDefault();
     setSearchPage(page);
     setPage(1);
     const response = await fetch(
-      // `${process.env.REACT_APP_API_URL}/data/fetchdata?page=${page}&limit=${limit}`,
       `${process.env.REACT_APP_API_URL}/data/fetchsearchdata/${searchTitle}`,
       {
         method: "GET",
@@ -58,8 +55,9 @@ const Fetchdata = () => {
     let temp: datatype = await response.json();
     setData(temp.User);
     setTotalResult(Number(temp.totalResults));
-    // setPage(searchPage);
   };
+
+  // funtion to change page number according to pagination
   const changePage = (type: string): void => {
     if (type === "prev") {
       setPage((old) => old - 1);
@@ -68,16 +66,21 @@ const Fetchdata = () => {
     }
   };
 
+
+  // Function to navigate to update page
   const updateData = () => {
     navigate("/data/updatedata");
   };
 
+  // Use effect to fetch the data initially and every time when searchtitle is empty
   useEffect(() => {
     if (searchTitle === "") {
       getData();
       setPage(searchPage);
     }
   }, [searchTitle]);
+
+  
   return (
     <>
       <Navbar  />

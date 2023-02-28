@@ -169,7 +169,6 @@ const Googleoauth = () => {
             value={mobile!}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setMobile(Number((e.target as HTMLInputElement).value))
-              // setMobile(e.target.value)
             }
             required
           />

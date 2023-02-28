@@ -6,13 +6,12 @@ const app = express();
 
 var cors = require('cors');
 
-connectToMongo();
-
 app.use(express.json());
 
-// app.use('/uploads',express.static('uploads'));
 const path = require('path');
-app.use("/uploads", express.static("/home/bs/TypeScript/myApplication/Backend/uploads/")); 
+app.use("/uploads", express.static("/home/bs/TypeScript/myApplication/Backend/uploads/"));
+
+connectToMongo();
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');

@@ -1,17 +1,18 @@
-import React,{ useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { googleLogout } from "@react-oauth/google";
 import {userProfile,profilepic} from '../Interface/common';
 import { useNavigate } from "react-router";
-import { NavDropdown, Dropdown } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
+import { Link } from "react-router-dom";
+
 const UpdateFormNavbar = () => {
     const userProfile : userProfile = JSON.parse(localStorage.getItem("profile") as string);
     const [profilepic,setProfilePic] = useState<string>("")
   const navigate = useNavigate();
 
+   // Function to get image of logged in user
   const getData = async () => {
-    // e.preventDefault();
     const response = await fetch(
-      // `${process.env.REACT_APP_API_URL}/data/fetchdata?page=${page}&limit=${limit}`,
       `${process.env.REACT_APP_API_URL}/data/fetchdata/${userProfile.email}`,
       {
         method: "GET",
@@ -25,15 +26,18 @@ const UpdateFormNavbar = () => {
     setProfilePic(temp.image);
   };
 
+   // Function to logout user
   const logout = () => {
     googleLogout();
     localStorage.clear();
     navigate("/");
   }
 
+  // Use effect to call the funcion to get image of logged in user
   useEffect(() => {
     getData();
 }, []);
+
   return (
     <div>
       <div style ={{marginTop:"110px"}}>
@@ -63,14 +67,13 @@ const UpdateFormNavbar = () => {
                         alt="ProfilePic"
                       />
                     )}
-              {/* <img src={userProfile.picture} alt="Profile Image" className="rounded-circle" width="55px" height="55px" /> */}
             </Dropdown.Toggle>
 
             <Dropdown.Menu align="end">
               <Dropdown.Item ><b>Hello, {userProfile.name}</b></Dropdown.Item>
-              <Dropdown.Item href="/home">Home</Dropdown.Item>
+              <Dropdown.Item as ={Link} to="/home">Home</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item href="/" onClick={logout} style ={{backgroundColor: "red"}}>Logout</Dropdown.Item>
+              <Dropdown.Item as ={Link} to="/" onClick={logout} style ={{backgroundColor: "red"}}>Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </li>

@@ -20,6 +20,7 @@ const Updateform = () => {
     aboutme: "userProfile.aboutme",
   });
 
+  // Function to get the data of logged in user
   const getData = async (email: string): Promise<void> => {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/data/fetchdata/${email}`,
@@ -35,6 +36,7 @@ const Updateform = () => {
     setData(temp);
   };
 
+  // Fucntion to handle the change the data of logged in user
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setData({
       ...data,
@@ -42,6 +44,7 @@ const Updateform = () => {
     });
   };
 
+  // Function to handle the change the image of logged in user
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -50,6 +53,7 @@ const Updateform = () => {
     }
   };
 
+  // Funcrion to submit the form data of logged in user for updation in database
   const submitData = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -57,15 +61,8 @@ const Updateform = () => {
 
     let newData = { ...data, email: userProfile.email };
 
-    // const formData = new FormData();
-    // for (const key in newData) {
-    //   formData.append(key, newData[key]);
-    // }
     const formData = new FormData();
-    // for (const key in newData) {
-    //   formData.append(key, newData?[key]);
-    // }
-    console.log('newData.image', newData.image,);
+  
     formData.append("email", newData.email);
     formData.append("name", newData.name);
     formData.append("lastName", newData.lastName);
@@ -76,10 +73,8 @@ const Updateform = () => {
     formData.append("image", newData.image);
     formData.append("Mobile", newData.Mobile);
 
-    // const boundary = `--------------------------${Date.now().toString(16)}`;
 
     const headers = {
-      // Accept: "application/json",
       "content-type": 'multipart/form-data;' 
     };
 
@@ -97,6 +92,7 @@ const Updateform = () => {
     return response.json();
   };
 
+  // Use effect to get the data of logged in user
   useEffect(() => {
     getData(userProfile.email as string);
   }, []);
@@ -162,18 +158,6 @@ const Updateform = () => {
                 onChange={onChange}
               />
             </div>
-            {/* <div className="col">
-           <label htmlFor="email"><b>Email</b></label>
-           <input
-            type="email"
-            name="email"
-            className="form-control"
-            placeholder="Email"
-            value={data.email}
-            onChange={onChange}
-            disabled
-           />
-           </div> */}
             <div className="col">
               <label htmlFor="Mobile">
                 <b>Mobile</b>
